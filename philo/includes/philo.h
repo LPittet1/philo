@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 10:10:35 by lpittet           #+#    #+#             */
-/*   Updated: 2024/12/20 11:23:58 by lpittet          ###   ########.fr       */
+/*   Updated: 2024/12/20 14:44:22 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,15 @@ typedef struct s_philo
 	int			num_eat;
 	int			*right_fork;
 	int			*left_fork;
-	t_data		data;
+	t_data		*data;
 }	t_philo;
 
 
-void	parsing(t_data *data, int ac, char **av);
-int		ft_atoi(const char *nptr);
-void	init_threads(t_data *data, int num_philos);
-void	*routine(void *philo);
-void 	print_usage(void);
+void			parsing(t_data *data, int ac, char **av);
+int				ft_atoi(const char *nptr);
+void			init_threads(t_data *data, int num_philos);
+void			*routine(void *philo);
+void 			print_usage(void);
+long unsigned	get_timestamp(long unsigned start);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 10:44:27 by lpittet           #+#    #+#             */
-/*   Updated: 2024/12/20 11:33:02 by lpittet          ###   ########.fr       */
+/*   Updated: 2024/12/20 15:39:55 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,12 @@ void	init_threads(t_data *data, int num_philos)
 		print_usage();
 		exit(1);
 	}
-	//forks = init_forks(num_philos);
+	//TODO start_monitoring();
+	//TODO forks = init_forks(num_philos);
 	data->philos = malloc(sizeof(t_philo *) * (num_philos + 1));
 	if (!data->philos)
 		exit(1);
+	//TODO data->philos = init_philos(num_philos, data);
 	while (num_philos)
 	{
 		data->philos[i - 1] = malloc(sizeof(t_philo));

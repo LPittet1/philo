@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 10:10:35 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/06 13:51:52 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/06 16:22:15 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,6 @@ void			*routine(void *philo);
 void			print_usage(void);
 long unsigned	get_time(long unsigned start);
 void			ft_usleep(long unsigned millisecond);
+int				monitoring(t_data *data);
 
 #endif

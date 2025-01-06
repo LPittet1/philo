@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 10:44:27 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/06 11:14:45 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/06 16:32:57 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,17 @@ pthread_mutex_t	*init_forks(int num_philos)
 	return (forks);
 }
 
-void	init_philos(int num, t_data **data, pthread_mutex_t *forks)
+void	init_philos(int num, t_data **data)
 {
-	int	i;
+	int				i;
+	pthread_mutex_t	*forks;
 
 	i = 1;
-	while (i < num)
+	forks = init_forks(num);
+	(*data)->philos = malloc(sizeof(t_philo *) * (num + 1));
+	if (!(*data)->philos)
+		exit(1);
+	while (i <= num)
 	{
 		(*data)->philos[i - 1] = malloc(sizeof(t_philo));
 		if (!(*data)->philos[i -1])
@@ -66,36 +71,28 @@ void	init_philos(int num, t_data **data, pthread_mutex_t *forks)
 		pthread_mutex_init(&(*data)->philos[i - 1]->meal, NULL);
 		(*data)->philos[i - 1]->last_meal = (*data)->start;
 		(*data)->philos[i - 1]->num_eat = 0;
+		i++;
 	}
 }
 
-void	init_threads(t_data *data, int num_philos)
+void	start_threads(t_data *data, int num_philos)
 {
-	int 		i = 1;
-	pthread_t 	thread;
-	pthread_mutex_t	*forks;
-	
-	if (!num_philos)
+	int 		i;
+	pthread_t 	*thread;
+
+	thread = malloc(sizeof(pthread_t) * data->num_philos + 1);
+	pthread_create(thread[0], NULL, monitoring, data);
+	i = 1;
+	while (i <= num_philos)
 	{
-		print_usage();
-		exit(1);
-	}
-	//TODO start_monitoring();
-	forks = init_forks(num_philos);
-	data->philos = malloc(sizeof(t_philo *) * (num_philos + 1));
-	if (!data->philos)
-		exit(1);
-	init_philos(num_philos, &data, forks);
-	while (num_philos)
-	{
-		data->philos[i - 1] = malloc(sizeof(t_philo));
-		if (!data->philos[i - 1])
-			exit(1);
-		data->philos[i - 1]->id = i;
-		pthread_create(&thread, NULL, routine, data->philos[i - 1]);
-		pthread_join(thread, NULL);
+		pthread_create(thread[i], NULL, routine, data->philos[i - 1]);
 		i++;
-		num_philos--;
+	}
+	i = 0;
+	while (i <= num_philos)
+	{
+		pthread_join(thread[i], NULL);
+		i++;
 	}
 }
 

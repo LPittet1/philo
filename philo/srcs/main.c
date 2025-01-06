@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 10:10:25 by lpittet           #+#    #+#             */
-/*   Updated: 2024/12/20 10:54:23 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/06 16:43:39 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,10 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	parsing(&data, ac, av);
+	//init_philos
+	//start_threads
+	//clean
 	return (0);
 }
+
+//TODO mutex_to_end simu, et adapter routine a ce changement

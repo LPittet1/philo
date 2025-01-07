@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 10:10:25 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/07 11:53:20 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/07 14:34:31 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	main(int ac, char **av)
 {
 	t_data			data;
 	pthread_mutex_t	*forks;
+	//t_philo			*philos;
 
 	if (ac < 5 || ac > 6)
 	{

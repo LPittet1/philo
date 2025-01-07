@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:05:45 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/07 11:34:40 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/07 13:26:26 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,9 @@ void	*monitoring(void *d)
 	int 	i;
 	t_data *data;
 
+	printf("Moni start\n");
 	data = (t_data *)d;
-	while (1)
+	while (!data->fininsh_sim)
 	{
 		i = 0;
 		while(i < data->num_philos)
@@ -60,7 +61,6 @@ void	*monitoring(void *d)
 				pthread_mutex_lock(&data->end_mutex);
 				data->fininsh_sim = 1;
 				pthread_mutex_unlock(&data->end_mutex);
-				break ;
 			}
 			i++;
 		}

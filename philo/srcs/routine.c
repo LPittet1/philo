@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 14:48:39 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/07 11:41:31 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/07 14:38:34 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,11 @@ void	*routine(void *p)
 {
 	t_philo	*philo;
 
+	
 	philo = (t_philo *)p;
+	if (!philo->id % 2)
+		usleep(5);
+	printf("philo %i start", philo->id);
 	pthread_mutex_lock(&philo->data->end_mutex);
 	while (!philo->data->fininsh_sim)
 	{

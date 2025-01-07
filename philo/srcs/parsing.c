@@ -6,19 +6,13 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 10:10:28 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/06 16:20:04 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/07 11:51:17 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-void print_usage(void)
-{
-	write(2, "USAGE ./philo number_of_philosophers time_to_die time_to_eat", 61);
-	write(2, "time_to_sleep [number_of_times_each_philosopher_must_eat]\n", 59);
-}
-
-int	ft_atoi(const char *nptr)
+static int	ft_atoi(const char *nptr)
 {
 	long	i;
 	long	res;
@@ -67,17 +61,13 @@ void	parsing(t_data *data, int ac, char **av)
 		}
 		i++;
 	}
+	data->start = get_time(get_time_abs());
 	data->time_to_die = ft_atoi(av[2]);
 	data->time_to_eat = ft_atoi(av[3]);
 	data->time_to_sleep = ft_atoi(av[4]);
 	data->num_philos = ft_atoi(av[1]);
-	data->num_to_eat = 0;
+	data->num_to_eat = -1;
 	if (ac == 6)
 		data->num_to_eat = ft_atoi(av[5]);
-	if (!data->num_philos || !data->time_to_die || !data->time_to_eat
-		|| !data->time_to_sleep || !data->num_to_eat)
-	{
-		print_usage();
-		exit(1);
-	}
+	data->fininsh_sim = 0;
 }

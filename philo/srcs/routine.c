@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 14:48:39 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/06 11:15:45 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/07 11:41:31 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ void	philo_eat(t_philo *philo)
 	ft_usleep(philo->data->time_to_eat);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
-	pthread_mutex_lock(&philo->meal);
+	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal = get_time(philo->data->start);
 	philo->num_eat++;
-	pthread_mutex_unlock(&philo->meal);
+	pthread_mutex_unlock(&philo->meal_mutex);
 }
 
 void	philo_sleep(t_philo *philo)
@@ -50,6 +50,15 @@ void	*routine(void *p)
 	t_philo	*philo;
 
 	philo = (t_philo *)p;
-	printf("%i\n", philo->id);
+	pthread_mutex_lock(&philo->data->end_mutex);
+	while (!philo->data->fininsh_sim)
+	{
+		pthread_mutex_unlock(&philo->data->end_mutex);
+		philo_eat(philo);
+		philo_sleep(philo);
+		philo_think(philo);
+		pthread_mutex_lock(&philo->data->end_mutex);
+	}
+	pthread_mutex_unlock(&philo->data->end_mutex);
 	return (NULL);
 }

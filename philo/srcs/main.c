@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 10:10:25 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/06 16:43:39 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/07 11:53:20 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int	main(int ac, char **av)
 {
-	t_data	data;
+	t_data			data;
+	pthread_mutex_t	*forks;
 
 	if (ac < 5 || ac > 6)
 	{
@@ -22,8 +23,15 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	parsing(&data, ac, av);
-	//init_philos
-	//start_threads
+	if (!data.num_philos || !data.time_to_die || !data.time_to_eat
+		|| !data.time_to_sleep || !data.num_to_eat)
+	{
+		print_usage();
+		return (1);
+	}
+	forks = init_forks(data.num_philos);
+	init_philos(data.num_philos, &data, forks);
+	start_threads(&data, data.num_philos);
 	//clean
 	return (0);
 }

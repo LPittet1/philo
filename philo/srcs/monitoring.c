@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:05:45 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/06 13:53:47 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/07 11:34:40 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 int	is_dead(t_philo *philo, t_data *data)
 {
-	pthread_mutex_lock(&philo->meal);
+	pthread_mutex_lock(&philo->meal_mutex);
 	if (get_time(data->start) - philo->last_meal > philo->data->time_to_die)
 	{
-		pthread_mutex_unlock(&philo->meal);
+		pthread_mutex_unlock(&philo->meal_mutex);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->meal);
+	pthread_mutex_unlock(&philo->meal_mutex);
 	return (0);
 }
 
@@ -31,33 +31,39 @@ int	eaten_enough(t_philo **philos, t_data *data)
 	i = 0;
 	while (i < data->num_philos)
 	{
-		pthread_mutex_lock(&philos[i]->meal);
+		pthread_mutex_lock(&philos[i]->meal_mutex);
 		if (philos[i]->num_eat < data->num_to_eat)
 		{
-			pthread_mutex_unlock(&philos[i]->meal);
+			pthread_mutex_unlock(&philos[i]->meal_mutex);
 			return (0);
 		}
-		pthread_mutex_unlock(&philos[i]->meal);
+		pthread_mutex_unlock(&philos[i]->meal_mutex);
 		i++;
 	}
 	return (1);
 }
 
-int	monitoring(t_data *data)
+void	*monitoring(void *d)
 {
-	int i;
+	int 	i;
+	t_data *data;
 
+	data = (t_data *)d;
 	while (1)
 	{
 		i = 0;
 		while(i < data->num_philos)
 		{
-			if (is_dead(data->philos[i], data))
+			if (is_dead(data->philos[i], data)
+				|| (data->num_to_eat < 0 && eaten_enough(data->philos, data)))
+			{
+				pthread_mutex_lock(&data->end_mutex);
+				data->fininsh_sim = 1;
+				pthread_mutex_unlock(&data->end_mutex);
 				break ;
-			if (data->num_to_eat && eaten_enough(data->philos, data))
-				break ;
+			}
 			i++;
 		}
 	}
-	return (1);
+	return (NULL);
 }

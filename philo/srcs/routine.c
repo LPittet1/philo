@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 14:48:39 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/07 14:38:34 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/09 13:25:03 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,16 @@
 
 void	philo_think(t_philo *philo)
 {
-	long unsigned	timestamp;
-
-	timestamp = get_time(philo->data->start);
-	printf("%lu\t%i is thinking", timestamp, philo->id);
+	print_action("is thinking", philo);
 }
 
 void	philo_eat(t_philo *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
-	printf("%lu\t%i has taken a fork", get_time(philo->data->start), philo->id);
+	print_action("has taken a fork", philo);
 	pthread_mutex_lock(philo->right_fork);
-	printf("%lu\t%i has taken a fork", get_time(philo->data->start), philo->id);
-	printf("%lu\t%i is eating", get_time(philo->data->start), philo->id);
+	print_action("has taken a fork", philo);
+	print_action("is eating", philo);
 	ft_usleep(philo->data->time_to_eat);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
@@ -38,10 +35,7 @@ void	philo_eat(t_philo *philo)
 
 void	philo_sleep(t_philo *philo)
 {
-	long unsigned	timestamp;
-
-	timestamp = get_time(philo->data->start);
-	printf("%lu\t%i is sleeping", timestamp, philo->id);
+	print_action("is sleeping", philo);
 	ft_usleep(philo->data->time_to_sleep);
 }
 
@@ -51,16 +45,15 @@ void	*routine(void *p)
 
 	
 	philo = (t_philo *)p;
-	if (!philo->id % 2)
+	if (philo->id % 2)
 		usleep(5);
-	printf("philo %i start", philo->id);
 	pthread_mutex_lock(&philo->data->end_mutex);
 	while (!philo->data->fininsh_sim)
 	{
 		pthread_mutex_unlock(&philo->data->end_mutex);
+		philo_think(philo);
 		philo_eat(philo);
 		philo_sleep(philo);
-		philo_think(philo);
 		pthread_mutex_lock(&philo->data->end_mutex);
 	}
 	pthread_mutex_unlock(&philo->data->end_mutex);

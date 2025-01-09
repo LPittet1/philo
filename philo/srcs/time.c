@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 14:44:45 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/06 13:55:30 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/09 14:07:09 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,6 @@ void	ft_usleep(long unsigned millisecond)
 	long unsigned	start;
 
 	start = get_time_abs();
-	while (get_time_abs() - start < millisecond * 1000)
+	while (get_time_abs() - start < millisecond)
 		usleep(100);
 }

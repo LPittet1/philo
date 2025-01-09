@@ -6,7 +6,7 @@ CFLAGS = -Wall -Werror -Wextra -g
 
 SRCDIR = srcs/
 
-SRCS =  $(SRCDIR)main.c $(SRCDIR)parsing.c $(SRCDIR)utils.c $(SRCDIR)routine.c $(SRCDIR)monitoring.c $(SRCDIR)time.c
+SRCS =  $(SRCDIR)main.c $(SRCDIR)parsing.c $(SRCDIR)utils.c $(SRCDIR)routine.c  $(SRCDIR)time.c $(SRCDIR)monitoring.c
 
 OBJS = ${SRCS:.c=.o}
 

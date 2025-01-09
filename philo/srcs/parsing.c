@@ -6,11 +6,17 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 10:10:28 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/07 11:51:17 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/09 13:10:07 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+void print_usage(void)
+{
+	write(2, "USAGE ./philo number_of_philosophers time_to_die time_to_eat", 61);
+	write(2, "time_to_sleep [number_of_times_each_philosopher_must_eat]\n", 59);
+}
 
 static int	ft_atoi(const char *nptr)
 {
@@ -61,7 +67,7 @@ void	parsing(t_data *data, int ac, char **av)
 		}
 		i++;
 	}
-	data->start = get_time(get_time_abs());
+	data->start = get_time_abs();
 	data->time_to_die = ft_atoi(av[2]);
 	data->time_to_eat = ft_atoi(av[3]);
 	data->time_to_sleep = ft_atoi(av[4]);
@@ -70,4 +76,5 @@ void	parsing(t_data *data, int ac, char **av)
 	if (ac == 6)
 		data->num_to_eat = ft_atoi(av[5]);
 	data->fininsh_sim = 0;
+	pthread_mutex_init(&data->end_mutex, NULL);
 }

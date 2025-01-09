@@ -6,33 +6,35 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:05:45 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/07 13:26:26 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/09 14:54:11 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	is_dead(t_philo *philo, t_data *data)
+static int	is_dead(t_philo *p)
 {
-	pthread_mutex_lock(&philo->meal_mutex);
-	if (get_time(data->start) - philo->last_meal > philo->data->time_to_die)
+	// printf("last meal %lu\n", p->last_meal - p->data->start);
+	// printf("ttd = %lu\n", p->data->time_to_die);
+	pthread_mutex_lock(&p->meal_mutex);
+	if (p->last_meal - p->data->start > p->data->time_to_die)
 	{
-		pthread_mutex_unlock(&philo->meal_mutex);
-		return (1);
+		pthread_mutex_unlock(&p->meal_mutex);
+		return (p->id);
 	}
-	pthread_mutex_unlock(&philo->meal_mutex);
+	pthread_mutex_unlock(&p->meal_mutex);
 	return (0);
 }
 
-int	eaten_enough(t_philo **philos, t_data *data)
+static int	eaten_enough(t_philo **philos)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while (i < data->num_philos)
+	while (i < philos[0]->data->num_philos)
 	{
 		pthread_mutex_lock(&philos[i]->meal_mutex);
-		if (philos[i]->num_eat < data->num_to_eat)
+		if (philos[i]->num_eat < philos[0]->data->num_to_eat)
 		{
 			pthread_mutex_unlock(&philos[i]->meal_mutex);
 			return (0);
@@ -43,24 +45,32 @@ int	eaten_enough(t_philo **philos, t_data *data)
 	return (1);
 }
 
-void	*monitoring(void *d)
+void	*monitoring(void *p)
 {
-	int 	i;
-	t_data *data;
+	t_philo *philos;
+	int		i;
 
-	printf("Moni start\n");
-	data = (t_data *)d;
-	while (!data->fininsh_sim)
+	philos = (t_philo *)p;
+
+	while (1)
 	{
 		i = 0;
-		while(i < data->num_philos)
+		while (i < philos[0].data->num_philos)
 		{
-			if (is_dead(data->philos[i], data)
-				|| (data->num_to_eat < 0 && eaten_enough(data->philos, data)))
+			if (is_dead(&philos[i]))
 			{
-				pthread_mutex_lock(&data->end_mutex);
-				data->fininsh_sim = 1;
-				pthread_mutex_unlock(&data->end_mutex);
+				print_action("is dead", &philos[i]);
+				pthread_mutex_lock(&philos[0].data->end_mutex);
+				philos[0].data->fininsh_sim = 1;
+				pthread_mutex_unlock(&philos[0].data->end_mutex);
+				return (NULL);
+			}
+			else if (philos[0].data->num_to_eat > 0 && eaten_enough(&philos))
+			{
+				pthread_mutex_lock(&philos[0].data->end_mutex);
+				philos[0].data->fininsh_sim = 1;
+				pthread_mutex_unlock(&philos[0].data->end_mutex);
+				return (NULL);
 			}
 			i++;
 		}

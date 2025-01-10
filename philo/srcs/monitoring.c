@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:05:45 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/09 14:54:11 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/10 11:00:45 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,8 @@
 
 static int	is_dead(t_philo *p)
 {
-	// printf("last meal %lu\n", p->last_meal - p->data->start);
-	// printf("ttd = %lu\n", p->data->time_to_die);
 	pthread_mutex_lock(&p->meal_mutex);
-	if (p->last_meal - p->data->start > p->data->time_to_die)
+	if (get_time_abs() - p->last_meal > p->data->time_to_die)
 	{
 		pthread_mutex_unlock(&p->meal_mutex);
 		return (p->id);
@@ -72,6 +70,7 @@ void	*monitoring(void *p)
 				pthread_mutex_unlock(&philos[0].data->end_mutex);
 				return (NULL);
 			}
+			usleep(10);
 			i++;
 		}
 	}

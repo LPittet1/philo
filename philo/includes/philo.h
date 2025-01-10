@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 10:10:35 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/09 14:08:19 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/10 10:20:22 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,15 @@ typedef struct s_data
 	int				num_to_eat;
 	int				num_philos;
 	pthread_mutex_t	end_mutex;
+	pthread_mutex_t	print_mutex;
 	int				fininsh_sim;
 }	t_data;
 
 typedef struct s_philo
 {
 	int				id;
+	long unsigned	start;
 	pthread_mutex_t	meal_mutex;
-	pthread_mutex_t	print_mutex;
 	int				num_eat;
 	long unsigned	last_meal;
 	pthread_mutex_t	*right_fork;

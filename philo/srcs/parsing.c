@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 10:10:28 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/09 13:10:07 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/10 10:15:25 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void print_usage(void)
 {
 	write(2, "USAGE ./philo number_of_philosophers time_to_die time_to_eat", 61);
-	write(2, "time_to_sleep [number_of_times_each_philosopher_must_eat]\n", 59);
+	write(2, " time_to_sleep [number_of_times_each_philosopher_must_eat]\n", 60);
 }
 
 static int	ft_atoi(const char *nptr)
@@ -61,10 +61,7 @@ void	parsing(t_data *data, int ac, char **av)
 	while (i < ac)
 	{
 		if (!is_only_digit(av[i]))
-		{
-			print_usage();
-			exit(1);
-		}
+			return ;
 		i++;
 	}
 	data->start = get_time_abs();
@@ -77,4 +74,5 @@ void	parsing(t_data *data, int ac, char **av)
 		data->num_to_eat = ft_atoi(av[5]);
 	data->fininsh_sim = 0;
 	pthread_mutex_init(&data->end_mutex, NULL);
+	pthread_mutex_init(&data->print_mutex, NULL);
 }

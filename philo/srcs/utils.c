@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 10:44:27 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/09 14:00:01 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/10 10:29:36 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ t_philo	*init_philos(t_data *data, pthread_mutex_t *forks)
 			philos[i].left_fork = &forks[i + 1];
 		philos[i].data = data;
 		philos[i].last_meal = data->start;
+		philos[i].start = data->start;
 		philos[i].num_eat = 0;
 		pthread_mutex_init(&philos[i].meal_mutex, NULL);
-		pthread_mutex_init(&philos[i].print_mutex, NULL);
 		i++;
 	}
 	return (philos);
@@ -87,12 +87,12 @@ void print_action(char *action, t_philo *philo)
 	long unsigned	time;
 	int 			state;
 
-	time = get_time_abs() - philo->data->start;
+	time = get_time_abs() - philo->start;
 	pthread_mutex_lock(&philo->data->end_mutex);
 	state = philo->data->fininsh_sim;
 	pthread_mutex_unlock(&philo->data->end_mutex);
-	pthread_mutex_lock(&philo->print_mutex);
+	pthread_mutex_lock(&philo->data->print_mutex);
 	if (!state)
 		printf("%lu %i %s\n", time, philo->id, action);
-	pthread_mutex_unlock(&philo->print_mutex);
+	pthread_mutex_unlock(&philo->data->print_mutex);
 }

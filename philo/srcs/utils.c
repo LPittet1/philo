@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 10:44:27 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/10 10:29:36 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/10 17:19:57 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,7 @@ t_philo	*init_philos(t_data *data, pthread_mutex_t *forks)
 	{
 		philos[i].id = i + 1;
 		philos[i].right_fork = &forks[i];
-		if (i == data->num_philos - 1)
-			philos[i].left_fork = &forks[0];
-		else
-			philos[i].left_fork = &forks[i + 1];
+		philos[i].left_fork = &forks[(i + 1) % data->num_philos];
 		philos[i].data = data;
 		philos[i].last_meal = data->start;
 		philos[i].start = data->start;
@@ -95,4 +92,21 @@ void print_action(char *action, t_philo *philo)
 	if (!state)
 		printf("%lu %i %s\n", time, philo->id, action);
 	pthread_mutex_unlock(&philo->data->print_mutex);
+}
+
+void	clean_all(t_philo **philo, t_data *data, pthread_mutex_t *forks)
+{
+	int i;
+
+	i = 0;
+	while (i < data->num_philos)
+	{
+		pthread_mutex_destroy(&forks[i]);
+		pthread_mutex_destroy(&philo[i]->meal_mutex);
+		i++;
+	}
+	free(forks);
+	free(*philo);
+	pthread_mutex_destroy(&data->end_mutex);
+	pthread_mutex_destroy(&data->print_mutex);
 }

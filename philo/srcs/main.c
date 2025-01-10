@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 10:10:25 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/10 10:06:49 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/10 17:24:28 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,7 @@ int	main(int ac, char **av)
 		return (1);
 	start_threads(philo_threads, &moni_thread, philos);
 	join_threads(philo_threads, &moni_thread, data.num_philos);
-	//clean
+	//clean_all(&philos, &data, forks);
 	return (0);
 }
 
-//TODO improve fork linking to philos

@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 10:10:35 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/10 10:20:22 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/10 14:42:07 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ long unsigned	get_time_abs(void);
 void			start_threads(pthread_t *p_t, pthread_t *m_t, t_philo *philos);
 void			join_threads(pthread_t *p_t, pthread_t *m_t, int num_philos);
 void 			print_action(char *action, t_philo *philo);
+void			clean_all(t_philo **philo, t_data *data, pthread_mutex_t *forks);
 
 #endif

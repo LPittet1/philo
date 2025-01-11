@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 10:10:35 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/10 14:42:07 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/11 11:29:39 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,27 @@ typedef struct s_philo
 	t_data			*data;
 }	t_philo;
 
-void			parsing(t_data *data, int ac, char **av);
-void			init_threads(t_data *data, int num_philos);
-void			*routine(void *philo);
-void			print_usage(void);
-long unsigned	get_time(long unsigned start);
-void			ft_usleep(long unsigned millisecond);
-void			*monitoring(void *p);
-pthread_mutex_t	*init_forks(int num_philos);
+// init.c
 t_philo			*init_philos(t_data *data, pthread_mutex_t *forks);
+pthread_mutex_t	*init_forks(int num_philos);
+
+// monitoring.c
+void			*monitoring(void *p);
+
+// parsing.c
+void			parsing(t_data *data, int ac, char **av);
+
+// routine.c
+void			*routine(void *p);
+
+// time.c
 long unsigned	get_time_abs(void);
+void			ft_usleep(long unsigned millisecond);
+
+// utils.c
 void			start_threads(pthread_t *p_t, pthread_t *m_t, t_philo *philos);
 void			join_threads(pthread_t *p_t, pthread_t *m_t, int num_philos);
-void 			print_action(char *action, t_philo *philo);
-void			clean_all(t_philo **philo, t_data *data, pthread_mutex_t *forks);
+void			print_action(char *action, t_philo *philo);
+void			clean(t_philo *p, t_data *d, pthread_mutex_t *f, pthread_t *t);
 
 #endif

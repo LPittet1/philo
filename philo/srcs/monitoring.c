@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 10:05:45 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/10 17:46:24 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/11 11:27:13 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,16 @@ static int	eaten_enough(t_philo *philos)
 	return (1);
 }
 
+static void	end(t_data *data)
+{
+	pthread_mutex_lock(&data->end_mutex);
+	data->fininsh_sim = 1;
+	pthread_mutex_unlock(&data->end_mutex);
+}
+
 void	*monitoring(void *p)
 {
-	t_philo *philos;
+	t_philo	*philos;
 	int		i;
 
 	philos = (t_philo *)p;
@@ -57,19 +64,14 @@ void	*monitoring(void *p)
 			if (is_dead(&philos[i]))
 			{
 				print_action("died", &philos[i]);
-				pthread_mutex_lock(&philos[0].data->end_mutex);
-				philos[0].data->fininsh_sim = 1;
-				pthread_mutex_unlock(&philos[0].data->end_mutex);
+				end(philos[0].data);
 				return (NULL);
 			}
 			else if (philos[0].data->num_to_eat > 0 && eaten_enough(philos))
 			{
-				pthread_mutex_lock(&philos[0].data->end_mutex);
-				philos[0].data->fininsh_sim = 1;
-				pthread_mutex_unlock(&philos[0].data->end_mutex);
+				end(philos[0].data);
 				return (NULL);
 			}
-			usleep(10);
 			i++;
 		}
 	}

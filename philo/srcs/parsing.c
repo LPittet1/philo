@@ -6,17 +6,11 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 10:10:28 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/10 10:15:25 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/11 11:24:00 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-
-void print_usage(void)
-{
-	write(2, "USAGE ./philo number_of_philosophers time_to_die time_to_eat", 61);
-	write(2, " time_to_sleep [number_of_times_each_philosopher_must_eat]\n", 60);
-}
 
 static int	ft_atoi(const char *nptr)
 {

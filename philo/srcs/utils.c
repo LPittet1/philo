@@ -6,56 +6,15 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 10:44:27 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/10 17:19:57 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/11 11:19:59 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-pthread_mutex_t	*init_forks(int num_philos)
-{
-	pthread_mutex_t	*forks;
-	int				i;
-
-	forks = malloc((num_philos) * sizeof(pthread_mutex_t));
-	if (!forks)
-		return (NULL);
-	i = 0;
-	while (i < num_philos)
-	{
-		pthread_mutex_init(&forks[i], NULL);
-		i++;
-	}
-	return (forks);
-}
-
-t_philo	*init_philos(t_data *data, pthread_mutex_t *forks)
-{
-	int 	i;
-	t_philo	*philos;
-
-	i = 0;
-	philos = malloc(sizeof(t_philo) * data->num_philos);
-	if (!philos)
-		return (NULL);
-	while (i < data->num_philos)
-	{
-		philos[i].id = i + 1;
-		philos[i].right_fork = &forks[i];
-		philos[i].left_fork = &forks[(i + 1) % data->num_philos];
-		philos[i].data = data;
-		philos[i].last_meal = data->start;
-		philos[i].start = data->start;
-		philos[i].num_eat = 0;
-		pthread_mutex_init(&philos[i].meal_mutex, NULL);
-		i++;
-	}
-	return (philos);
-}
-
 void	start_threads(pthread_t *p_t, pthread_t *m_t, t_philo *philos)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	pthread_create(m_t, NULL, monitoring, philos);
@@ -68,7 +27,7 @@ void	start_threads(pthread_t *p_t, pthread_t *m_t, t_philo *philos)
 
 void	join_threads(pthread_t *p_t, pthread_t *m_t, int num_philos)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < num_philos)
@@ -79,10 +38,10 @@ void	join_threads(pthread_t *p_t, pthread_t *m_t, int num_philos)
 	pthread_join(*m_t, NULL);
 }
 
-void print_action(char *action, t_philo *philo)
+void	print_action(char *action, t_philo *philo)
 {
 	long unsigned	time;
-	int 			state;
+	int				state;
 
 	time = get_time_abs() - philo->start;
 	pthread_mutex_lock(&philo->data->end_mutex);
@@ -94,19 +53,20 @@ void print_action(char *action, t_philo *philo)
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
-void	clean_all(t_philo **philo, t_data *data, pthread_mutex_t *forks)
+void	clean(t_philo *p, t_data *d, pthread_mutex_t *f, pthread_t *t)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while (i < data->num_philos)
+	while (i < d->num_philos)
 	{
-		pthread_mutex_destroy(&forks[i]);
-		pthread_mutex_destroy(&philo[i]->meal_mutex);
+		pthread_mutex_destroy(&f[i]);
+		pthread_mutex_destroy(&p[i].meal_mutex);
 		i++;
 	}
-	free(forks);
-	free(*philo);
-	pthread_mutex_destroy(&data->end_mutex);
-	pthread_mutex_destroy(&data->print_mutex);
+	free(f);
+	free(p);
+	free(t);
+	pthread_mutex_destroy(&d->end_mutex);
+	pthread_mutex_destroy(&d->print_mutex);
 }

@@ -6,7 +6,7 @@
 /*   By: lpittet <lpittet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 14:44:45 by lpittet           #+#    #+#             */
-/*   Updated: 2025/01/09 14:07:09 by lpittet          ###   ########.fr       */
+/*   Updated: 2025/01/11 11:25:56 by lpittet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,6 @@ long unsigned	get_time_abs(void)
 
 	gettimeofday(&time, NULL);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-}
-
-long unsigned	get_time(long unsigned start)
-{
-	return (get_time_abs() - start);
 }
 
 void	ft_usleep(long unsigned millisecond)
